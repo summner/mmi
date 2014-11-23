@@ -26,6 +26,7 @@ for filename, color, mark in zip(files, colors, marks):
         efforts = []
         generations = []
         all_runs = []
+        last_run = None
         for row in r:
             runs = {}
             bunch = []
@@ -40,12 +41,13 @@ for filename, color, mark in zip(files, colors, marks):
             efforts.append(rest['effort'])
             generations.append(rest['generation'])
             all_runs.append(bunch)
+            last_run=bunch
         plt.subplot(121)
         plt.xlim([0, 500])
         plt.plot(map(lambda e: float(e)/1000.0, efforts), map(lambda runs: np.mean(runs)*100, all_runs),
                  color=color, markevery=20, marker=mark)
         # bplotdata.append(map(lambda runs: np.mean(runs), all_runs))
-        bplotdata.append(np.array(all_runs).flatten()*100)
+        bplotdata.append(np.array(last_run)*100)
 
     # bplotdata.append(map(lambda runs: np.mean(runs), all_runs))
 
