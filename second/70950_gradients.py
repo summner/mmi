@@ -6,6 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import numpy as np
+import math
 # matplotlib.use('Agg')
 
 
@@ -53,11 +54,12 @@ def gradient_rgb_bw(v):
 
 
 def gradient_rgb_gbr(v):
-    g = 1.0-v*2.0
-    if (g < 0.0 ): g = 0
-    # g = 0
+    g = 0
     r = 0
-    if (v > 0.5): r = 2.0*v - 1.0
+    if (v > 0.5):
+        r = 2.0*v - 1.0
+    else:
+        g = 1.0-v*2.0
     b = v*2 - r*2.0
     # b = 0
 
@@ -65,8 +67,21 @@ def gradient_rgb_gbr(v):
 
 
 def gradient_rgb_gbr_full(v):
-    #TODO
-    return (0, v, 1-v)
+    g = 0
+    r = 0
+    if (v < 0.25):
+        g = 1.0-v*2.0
+    if (v < 0.5):
+        g = 1.0-v*2.0
+    else:
+        r = 2.0*v - 1.0
+
+    b = v*2 - r*2.0
+    # b = 0
+
+    # return (0, 0, b)
+
+    return (r, g, b)
 
 
 def gradient_rgb_wb_custom(v):
