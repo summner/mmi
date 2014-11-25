@@ -87,8 +87,31 @@ def gradient_rgb_gbr_full(v):
 
 
 def gradient_rgb_wb_custom(v):
-    # TODO
-    return (0, 0, 0)
+    (r, g, b) = (1, 1, 1)
+    x = 7.0
+    d = 1 / x
+    if v < d:
+        g = -v * x
+    elif (v < d * 2):
+        g = 0
+        r = 2 - v * x
+    elif (v < d * 3):
+        g = v * x - 2
+        r = 0
+    elif (v < d * 4):
+        r = 0
+        b =  4 - v * x
+    elif (v < d * 5):
+        b = 0
+        r = v * x - 4
+    elif (v < d * 6):
+        b = 0
+        g = 6 - v * x
+    elif (v < d * 7):
+        b, g = 0, 0
+        r = 7 - v * x
+
+    return (r, g, b)
 
 
 def gradient_hsv_bw(v):
