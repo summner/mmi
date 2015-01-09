@@ -6,6 +6,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import numpy as np
+import colorsys
 import math
 # matplotlib.use('Agg')
 
@@ -46,8 +47,27 @@ def plot_color_gradients(gradients, names):
 
 
 def hsv2rgb(h, s, v):
-    # TODO
-    return (h, s, v)
+    c = s * v  # chroma
+    h1 = 6 * h
+    x = c * (1 - np.fabs(h1 % 2 - 1))
+    if h1 < 0:
+        (r, g, b) = (0, 0, 0)
+    elif h1 < 1:
+        (r, g, b) = (c, x, 0)
+    elif h1 < 2:
+        (r, g, b) = (x, c, 0)
+    elif h1 < 3:
+        (r, g, b) = (0, c, x)
+    elif h1 < 4:
+        (r, g, b) = (0, x, c)
+    elif h1 < 5:
+        (r, g, b) = (x, 0, c)
+    elif h1 <= 6.0:
+        (r, g, b) = (c, 0, x)
+    else:
+        (r, g, b) = (0, 0, 0)
+
+    return (r, g, b)
 
 
 def gradient_rgb_bw(v):
@@ -100,7 +120,7 @@ def gradient_rgb_wb_custom(v):
         r = 0
     elif (v < d * 4):
         r = 0
-        b =  4 - v * x
+        b = 4 - v * x
     elif (v < d * 5):
         b = 0
         r = v * x - 4
@@ -116,12 +136,12 @@ def gradient_rgb_wb_custom(v):
 
 def gradient_hsv_bw(v):
     # TODO
-    return hsv2rgb(0, 0, 0)
+    return np.array(hsv2rgb(1, v, 1)) + np.array(hsv2rgb(1, v, 1)) + np.array(hsv2rgb(1 , v, 1))
 
 
 def gradient_hsv_gbr(v):
     # TODO
-    return hsv2rgb(0, 0, 0)
+    return hsv2rgb(np.fabs((v-1/3)+1), 1, 1)
 
 
 def gradient_hsv_unknown(v):
