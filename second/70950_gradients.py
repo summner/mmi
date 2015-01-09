@@ -47,27 +47,41 @@ def plot_color_gradients(gradients, names):
 
 
 def hsv2rgb(h, s, v):
-    c = s * v  # chroma
-    h1 = 6 * h
-    x = c * (1 - np.fabs(h1 % 2 - 1))
-    if h1 < 0:
-        (r, g, b) = (0, 0, 0)
-    elif h1 < 1:
-        (r, g, b) = (c, x, 0)
-    elif h1 < 2:
-        (r, g, b) = (x, c, 0)
-    elif h1 < 3:
-        (r, g, b) = (0, c, x)
-    elif h1 < 4:
-        (r, g, b) = (0, x, c)
-    elif h1 < 5:
-        (r, g, b) = (x, 0, c)
-    elif h1 <= 6.0:
-        (r, g, b) = (c, 0, x)
-    else:
-        (r, g, b) = (0, 0, 0)
+    if s == 0.0: return [v, v, v]
+    i = int(h*6.)
+    f = (h*6.)-i
+    p,q,t = v*(1.0-s), v*(1.0-s*f), v*(1.0-s*(1.0-f))
+    i%=6
+    if i == 0: return [v, t, p]
+    if i == 1: return [q, v, p]
+    if i == 2: return [p, v, t]
+    if i == 3: return [p, q, v]
+    if i == 4: return [t, p, v]
+    if i == 5: return [v, p, q]
+    # c = s * v  # chroma
+    # h1 = 6 * h
+    # x = c * (1 - np.fabs(h1 % 2 - 1))
 
-    return (r, g, b)
+    #
+    # (r,g,b) = (0,0,0)
+    # if h1 < 0:
+    #     (r, g, b) = (0, 0, 0)
+    # elif h1 < 1:
+    #     (r, g, b) = (c, x, 0)
+    # elif h1 < 2:
+    #     (r, g, b) = (x, c, 0)
+    # elif h1 < 3:
+    #     (r, g, b) = (0, c, x)
+    # elif h1 < 4:
+    #     (r, g, b) = (0, x, c)
+    # elif h1 < 5:
+    #     (r, g, b) = (x, 0, c)
+    # elif h1 <= 6.0:
+    #     (r, g, b) = (c, 0, x)
+    # else:
+    #     (r, g, b) = (0, 0, 0)
+
+    # return (r, g, b)
 
 
 def gradient_rgb_bw(v):
@@ -136,22 +150,22 @@ def gradient_rgb_wb_custom(v):
 
 def gradient_hsv_bw(v):
     # TODO
-    return np.array(hsv2rgb(1, v, 1)) + np.array(hsv2rgb(1, v, 1)) + np.array(hsv2rgb(1 , v, 1))
-
+    # return np.array(hsv2rgb(1, v, 1)) + np.array(hsv2rgb(1, v, 1)) + np.array(hsv2rgb(1 , v, 1))
+    return hsv2rgb(0, 0, v)
 
 def gradient_hsv_gbr(v):
     # TODO
-    return hsv2rgb(np.fabs((v-1/3)+1), 1, 1)
+    return hsv2rgb(120/360+240*v/360.0, 1, 1)
 
 
 def gradient_hsv_unknown(v):
     # TODO
-    return hsv2rgb(0, 0, 0)
+    return hsv2rgb(.3- .3*v, .6, 1)
 
 
 def gradient_hsv_custom(v):
     # TODO
-    return hsv2rgb(0, 0, 0)
+    return hsv2rgb(.3 + 2*v, 1, 1)
 
 
 if __name__ == '__main__':
