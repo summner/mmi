@@ -24,21 +24,27 @@ for fpath in glob("./*.jpg"):
     thr = cv2.cvtColor(tmp, cv2.COLOR_BGR2GRAY)
 
     high_thresh, thresh_im = cv2.threshold(thr, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    lowThresh = 0.5*high_thresh
+    lowThresh = 0.7*high_thresh
     tmp  = thr
     # tmp = cv2.bilateralFilter(thr, 11, 11, 11)
-    tmp = cv2.Canny(tmp, lowThresh, high_thresh)
+    tmp = cv2.Canny(thr, lowThresh, high_thresh,)
 
-    tmp = cv2.dilate(tmp, np.ones((2,2)), iterations=4)
+    tmp = cv2.dilate(tmp, np.ones((2,2)), iterations=3)
+    tmp = cv2.erode(tmp, np.ones((2,2)), iterations=2)
+    # tmp = cv2.dilate(tmp, np.ones((2,2)), iterations=2)
+    # tmp = cv2.erode(tmp, np.ones((2,2)), iterations=2)
+
+
+    # cv2.imshow("as", tmp)
+    # cv2.waitKey(0)
+    # break
     (cnts, _) = cv2.findContours(tmp.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     final = img
     i = len(cnts)
     print "s"
     for i, c in enumerate(cnts):
         peri = cv2.arcLength(c, True)
-        approx = cv2.approxPolyDP(c, 0.1 * peri, True)
-        print peri
-        if peri < 400.0:
+        if peri < 300.0:
             continue
         # if our approximated contour has four points, then
         # we can assume that we have found our screen
@@ -50,7 +56,7 @@ for fpath in glob("./*.jpg"):
         y = int(m['m01']/m['m00'])
         cv2.circle(final, (x, y), 8,(255,255,255), -1, 8)
     # cv2.imwrite("detected/" + fpath, final)
-    final = cv2.resize(final, (200,200))
+    final = cv2.resize(final, (500,500))
     cv2.imshow("as", final)
     cv2.waitKey(0)
 
